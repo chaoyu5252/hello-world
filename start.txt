@@ -1,0 +1,53 @@
+电脑开发环境设置
+
+1. 系统设置
+
+1.1 升级WINDOWS 10（可选）
+我们推荐你使用WINDOWS 10作为WINDOWS操作系统。因为WINDOWS 10作为免费系统使用不存在版权问题。
+升级WINDOWS 10，只需要百度WINDOWS 10，安装升级程序即可。
+建议卸载电脑上不必要的程序，如PPTV，百度输入法等。
+如需安装OFFICE 2010，请向公司索取2010安装程序。
+
+1.2 安装Ubuntu 14.04
+1.2.1 在WINDOWS系统下，进入控制面板->管理工具->计算机管理。右键点击C盘选择压缩卷。输入15000MB，压缩出15G的空闲空间。
+1.2.2 将Ubuntu安装U盘插入机箱，开机后按F2或DEL键进入BOOST页面，在启动项中选择U盘。保存设置并退出。
+1.2.3 系统将重启并自动进入Ubuntu安装界面，根据提示安装系统。
+注：可以省略创建SWAP盘进行Ubuntu系统安装。
+1.2.4 Ubuntu系统安装完成后会丢失WINDOWS启动项，运行如下命令进行修复：sudo updata-grub
+1.2.5 运行如下命令对系统进行更新：sudo apt-get update && sudo apt-get upgrade
+
+2. VPN设置
+
+2.1 Wine
+2.1.1 运行如下命令安装Wine 1.7.35
+$ sudo add-apt-repository ppa:ubuntu-wine/ppa
+$ sudo apt-get update
+$ sudo apt-get install -y wine1.7
+
+2.1 FreeGate安装
+2.1.1 向公司索取FreeGate应用程序。
+2.1.2 复制fg758p.exe至wine下Program Files,如~/.wine/drive_c/Program\ Files/Free\ Gate/。
+2.1.3 运行如下命令安装mfc42.dll：winetricks  mfc42
+2.1.4 创建Free Gate快捷方式：
+$ sudo apt-get install --no-install-recommends gnome-panel
+$ gnome-desktop-item-edit ~/ --create-new
+在目录中手动填入fg758.exe路径，如~/.wine/drive_c/Program\ Files/Free\ Gate/fg758.exe。
+确认完成。
+
+2.2 Firefox设置
+2.2.1 Firefox 设置->高级->网络->连接设置中，手动代理设置，输入127.0.0.1，端口8580。
+2.2.2 如果仍然无法打开www.google.com或者www.youtube.com，可以安装firefox插件FoxyProxy。
+
+3. Git安装
+3.1 安装Git
+$ sudo apt-get update
+$ sudo apt-get install git
+3.2 设置Git
+$ git config --global user.name "Your name"
+$ git config --global user.email "youremail@domain.com"
+3.3 下载hello-world代码
+创建projects文件夹，如/home/username/Porjects，在Projects文件夹下运行：
+$ git clone https://github.com/yuanshuoit/hello-world.git
+
+
+
