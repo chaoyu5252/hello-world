@@ -31,7 +31,7 @@ $ sudo apt-get install -y wine1.7
 2.1.4 创建Free Gate快捷方式：
 $ sudo apt-get install --no-install-recommends gnome-panel
 $ gnome-desktop-item-edit ~/ --create-new
-在目录中手动填入fg758.exe路径，如~/.wine/drive_c/Program\ Files/Free\ Gate/fg758.exe。
+在目录中手动填入命令env WINEPREFIX="/home/username/.wine" wine "<fg758p.exe file path>"，fg758.exe路径如/home/username/.wine/drive_c/Program Files/Free Gate/fg758.exe。
 确认完成。
 
 2.2 Firefox设置
@@ -48,6 +48,69 @@ $ git config --global user.email "youremail@domain.com"
 3.3 下载hello-world代码
 创建projects文件夹，如/home/username/Porjects，在Projects文件夹下运行：
 $ git clone https://github.com/yuanshuoit/hello-world.git
+
+4. 配置LEMP环境
+4.1 安装Nginx
+4.1.1 运行 $ sudo apt-get update
+4.1.2 安装Nginx $ sudo apt-get install nginx
+4.1.3 启动Nginx服务 $ sudo service nginx start
+4.1.4 查看Nginx状态 $ sudo service nginx status
+4.1.5 测试Nginx 浏览器中打开http://127.0.0.1/ 或 http://localhost/
+4.1.6 创建网站目录 $ sudo mkdir -p /srv/www/longqishi.com/
+4.1.7 创建测试文件 $ sudo touch /srv/www/longqishi.com/index.html
+4.1.8 打开并编辑index.html文件，写入
+<html>
+<body>
+
+<h1>Hello World</h1>
+
+<p>Hello World!</p>
+
+</body>
+</html>
+4.1.9 打开并编辑/etc/nginx/sites-available/default，添加
+# longqishi.com
+server {
+	listen 8080;
+	listen [::]:8080;
+	
+	root /srv/www/longqishi.com;
+	index index.html index.php;
+
+	# Make site accessible from http://localhost:8080/
+	server_name localhost:8080;
+}
+4.1.10 运行 $ sudo nginx -t 确认配置文件正确。
+4.1.11 重启nginx $ sudo service nginx restart，打开http://localhost:8080/确认配置完成。
+
+4.2 安装PHP5
+4.2.1 运行 $ sudo apt-get update
+4.2.2 安装php5 运行 $ sudo apt-get install php5
+4.2.3 安装php5-fpm $ sudo apt-get install php5-fpm
+4.2.4 配置PHP 打开/etc/php5/fpm/php.ini，找到cig.fix_pathinfo=1，去掉注释并修改为cig.fix_pathinfo=0
+4.2.5 重启php-fpm服务 $ sudo service php5-fpm restart
+4.2.6 查看php-fpm服务状态 $ sudo service php5-fpm status
+4.2.7 创建文件 /srv/www/longqishi.com/index.php 写入
+<?php
+phpinfo();
+?>
+4.2.8 配置nginx 打开并编辑/etc/nginx/sites-available/default，在server中添加：
+	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+	#
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+		# With php5-cgi alone:
+		#fastcgi_pass 127.0.0.1:9000;
+		# With php5-fpm:
+		fastcgi_pass unix:/var/run/php5-fpm.sock;
+		fastcgi_index index.php;
+		include fastcgi_params;
+	}
+4.2.9 重启nginx $ sudo service nginx restart
+4.2.10 打开http://localhost:8080/index.php验证php安装完成
+
 
 
 
