@@ -83,8 +83,10 @@ server {
 4.1.10 运行 $ sudo nginx -t 确认配置文件正确。
 4.1.11 重启nginx $ sudo service nginx restart，打开http://localhost:8080/确认配置完成。
 
-4.2 安装PHP5
-4.2.1 运行 $ sudo apt-get update
+4.2 安装PHP5 5.6
+4.2.1 运行 
+$ sudo apt-get update 
+$ sudo add-apt-repository ppa:ondrej/php5-5.6
 4.2.2 安装php5 运行 $ sudo apt-get install php5
 4.2.3 安装php5-fpm $ sudo apt-get install php5-fpm
 4.2.4 配置PHP 打开/etc/php5/fpm/php.ini，找到cig.fix_pathinfo=1，去掉注释并修改为cig.fix_pathinfo=0
@@ -110,6 +112,51 @@ phpinfo();
 	}
 4.2.9 重启nginx $ sudo service nginx restart
 4.2.10 打开http://localhost:8080/index.php验证php安装完成
+
+4.3 安装MySQL 5.6
+4.3.1 安装MySQL 
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install mysql-server-5.6 mysql-client-5.6
+4.3.2 确认MySQL安装完成 $ sudo service mysql status
+4.3.3 安装phpMyAdmin $ sudo apt-get install phpmyadmin
+4.3.4 创建文件夹 $ sudo mkdir /srv/www/phpmyadmin
+4.3.5 创建phpMyAdmin链接 $ sudo ln -s /usr/share/phpmyadmin/ /srv/www/phpmyadmin/
+4.3.6 配置Nginx，打开并编辑/etc/nginx/sites-available/default，添加 
+# phpmyadmin
+server {
+	listen 8090;
+	listen [::]:8090;
+	
+	root /srv/www/phpmyadmin;
+	index index.php index.html;
+
+	# Make site accessible from http://localhost:8090/
+	server_name localhost:8090;
+
+	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+	#
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+		# With php5-cgi alone:
+		#fastcgi_pass 127.0.0.1:9000;
+		# With php5-fpm:
+		fastcgi_pass unix:/var/run/php5-fpm.sock;
+		fastcgi_index index.php;
+		include fastcgi_params;
+	}
+}
+4.3.7 重启Nginx $ sudo service nginx restart
+4.3.8 确认phpmyadmin安装完成，打开http://localhost:8090/phpmyadmin/
+注意： 
+	a. 如果显示警告，你的php sql library版本与mysql版本不一致，请安装php-mysqlnd $ sudo apt-get php-mysqlnd
+	b. 如果显示警告controluser配置连接错误，可以忽略。也可以通过注释掉/etc/phpmyadmin/config.inc.php文件中代码来去掉。
+	    /* Optional: User for advanced features */
+		// $cfg['Servers'][$i]['controluser'] = $dbuser;
+		// $cfg['Servers'][$i]['controlpass'] = $dbpass;
+
 
 
 
