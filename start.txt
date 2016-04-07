@@ -159,6 +159,66 @@ server {
 
 hello
 
+5 安装Eclipse
+
+5.1 安装Eclipse 
+5.1.1 安装eclipse $ sudo apt-get install eclipse
+
+5.2 下载Eclipse PHP插件
+5.2.1 从http://eclipse.org/pdt/下载，比如eclipse-php-mars-2-linux-gtk-x86_64.tar.gz。
+5.2.2 将压缩包解压至~/目录下，$ sudo ~/eclipse/eclipse，安装成功。
+
+5.3 安装xdebug
+5.3.1 安装xdebug $ sudo apt-get install php5-xdebug
+5.3.2 打开/etc/php5/fpm/php.ini，添加
+[xdebug]
+zend_extension=/usr/lib/php5/20131226/xdebug.so
+xdebug.remote_autostart=on
+xdebug.remote_connect_back=on
+xdebug.remote_enable=on
+xdebug.remote_handler=dbgp
+xdebug.remote_host=localhost
+xdebug.remote_port=9000
+xdebug.idekey=ECLIPSE_DBGP
+注意：zend_extension目录根据xdebug版本不同会有变化，添加前确认路径正确。
+5.3.3 重启fpm服务 $ sudo service php5-fpm restart
+5.3.4 重启nginx  $ sudo service nginx restart
+5.3.5 打开http://localhost:8080，查看xdebug配置生效。
+注意以下几点：
+1. xdebug.remote_enable值为on
+2. xdebug.remote_handler值为dbgp
+3. xdebug.remote_port值为localhost
+
+
+5.4 配置eclipse
+5.4.1 启动eclipse $ sudo ~/eclipse/eclipse
+5.4.2 设置PHP Executable 打开Windows->Preferences->PHP->PHP Executables, 选择Add...，点击Executable Path后Browse...，选择/usr/bin/php5，点击确认(Finish)。
+5.4.3 双击刚刚添加的PHP，切换到Debugger界面，选择XDebug。
+5.4.4 设置PHP Servers，打开Windows->Preferences->PHP->Servers，双击Default PHP Web Server，将Base URL改为http://localhost:8080。将Document Root设置为/srv/www/longqishi.com。
+切换到Debugger界面，选择XDebug。
+5.4.5 在Eclipse主界面中，创建新的PHP Project，起名为HelloWorld。添加新PHP文件，取名为index.php，在文件中编辑
+<?php
+$param = isset($_GET['myParam']) ? $_GET['myParam'] : null;
+
+if (!empty($param)) {
+var_dump($param); 
+}
+echo phpinfo();
+双击添加断点。
+5.4.6 右键选择Debug->Debug Configuration...，在hello world中配置Default PHP Web Server，设置Debugger为XDebug。
+5.4.7 右键选择Debug->PHP Web Applicaiton，如果断点被获取，并且跳过页面正常显示，则配置成功。
+
+6 安装Phalcon
+6.1 安装编译程序 $ sudo apt-get install php5-dev php5-mysql gcc libpcre3-dev
+6.2 获取程序包，进入～/Projects文件夹 $ git clone --depth=1 git://github.com/phalcon/cphalcon.git
+6.3 编译安装 Phalcon
+$ cd cphalcon/build
+$ sudo ./install
+6.4 创建文件30-phalcon.ini $sudo touch /etc/php5/fpm/conf.d/30-phalcon.ini
+在文件中添加如下内容 extension=phalcon.so
+6.5 重启fpm服务 $ sudo service php5-fpm restart
+6.6 重启nginx  $ sudo service nginx restart
+6.7 打开http://localhost:8080，查看Phalcon已经安装成功。
 
 
 
