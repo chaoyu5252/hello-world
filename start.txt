@@ -157,7 +157,6 @@ server {
 		// $cfg['Servers'][$i]['controluser'] = $dbuser;
 		// $cfg['Servers'][$i]['controlpass'] = $dbpass;
 
-hello
 
 5 安装Eclipse
 
