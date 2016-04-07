@@ -157,6 +157,7 @@ server {
 		// $cfg['Servers'][$i]['controluser'] = $dbuser;
 		// $cfg['Servers'][$i]['controlpass'] = $dbpass;
 
+hello
 
 
 
