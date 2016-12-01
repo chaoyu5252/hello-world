@@ -83,6 +83,10 @@ server {
 4.1.10 运行 $ sudo nginx -t 确认配置文件正确。
 4.1.11 重启nginx $ sudo service nginx restart，打开http://localhost:8080/确认配置完成。
 
+
+sudo apt-cache search php
+
+
 4.2 安装PHP5 5.6
 4.2.1 运行 
 $ sudo apt-get update 
@@ -218,6 +222,10 @@ $ sudo ./install
 6.5 重启fpm服务 $ sudo service php5-fpm restart
 6.6 重启nginx  $ sudo service nginx restart
 6.7 打开http://localhost:8080，查看Phalcon已经安装成功。
+
+7.安装composer
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composers
 
 
 
